@@ -25,14 +25,29 @@ const ticketForm =
     document.getElementById("ticketForm");
 
 
-// TOAST
+// TOAST CENTER
 function showToast(message) {
 
     const toast =
         document.createElement("div");
 
     toast.className =
-        "fixed top-6 right-6 bg-green-500 text-white px-5 py-3 rounded-xl shadow-2xl z-50 text-sm font-semibold";
+        `
+        fixed 
+        top-6 
+        left-1/2 
+        -translate-x-1/2 
+        bg-green-500 
+        text-white 
+        px-6 
+        py-3 
+        rounded-xl 
+        shadow-2xl 
+        z-50 
+        text-sm 
+        font-semibold
+        animate-bounce
+        `;
 
     toast.innerText = message;
 
@@ -40,9 +55,21 @@ function showToast(message) {
 
     setTimeout(() => {
 
+        toast.style.opacity = "0";
+
+        toast.style.transform =
+            "translateX(-50%) translateY(-10px)";
+
+        toast.style.transition =
+            "all 0.4s ease";
+
+    }, 1800);
+
+    setTimeout(() => {
+
         toast.remove();
 
-    }, 2200);
+    }, 2300);
 }
 
 
@@ -125,10 +152,7 @@ async function fetchTickets(
 
     } catch (error) {
 
-        console.error(
-            "Error fetching tickets:",
-            error
-        );
+        console.error(error);
     }
 }
 
@@ -167,7 +191,7 @@ function renderTickets(tickets) {
         ).length;
 
 
-    // EMPTY
+    // EMPTY STATE
     if (tickets.length === 0) {
 
         ticketTableBody.innerHTML = `
@@ -175,7 +199,7 @@ function renderTickets(tickets) {
             <tr>
 
                 <td colspan="5"
-                    class="p-8 text-center text-gray-400 text-sm">
+                    class="p-10 text-center text-gray-400">
 
                     No tickets found
 
@@ -197,27 +221,41 @@ function renderTickets(tickets) {
             document.createElement("tr");
 
         row.className =
-            "border-t border-gray-800 hover:bg-gray-800/70 transition cursor-pointer";
+            `
+            border-t 
+            border-gray-800 
+            hover:bg-[#1B2435]
+            transition-all 
+            duration-300 
+            cursor-pointer
+            hover:scale-[1.005]
+            `;
 
         row.innerHTML = `
         
-            <td class="p-4 font-semibold text-sm">
+            <td class="p-3 font-semibold text-sm">
                 ${ticket.ticket_id}
             </td>
 
-            <td class="p-4 text-sm">
+            <td class="p-3 text-sm">
                 ${ticket.customer_name}
             </td>
 
-            <td class="p-4 text-sm">
+            <td class="p-3 text-sm">
                 ${ticket.subject}
             </td>
 
-            <td class="p-4">
+            <td class="p-3">
 
                 <span
-                    class="px-3 py-1 rounded-full text-xs font-medium
-                    ${getPriorityClass(ticket.priority)}">
+                    class="
+                    px-3 
+                    py-1 
+                    rounded-full 
+                    text-xs 
+                    font-medium
+                    ${getPriorityClass(ticket.priority)}
+                    ">
 
                     ${ticket.priority}
 
@@ -225,12 +263,23 @@ function renderTickets(tickets) {
 
             </td>
 
-            <td class="p-4">
+            <td class="p-3">
 
                 <select
                     onclick="event.stopPropagation()"
                     onchange="updateTicketStatus('${ticket.ticket_id}', this.value)"
-                    class="bg-[#1F2937] border border-gray-700 rounded-lg px-3 py-2 text-xs outline-none">
+                    class="
+                    bg-[#1F2937] 
+                    border 
+                    border-gray-700 
+                    rounded-lg 
+                    px-3 
+                    py-2 
+                    text-xs 
+                    outline-none
+                    hover:border-blue-500
+                    transition
+                    ">
 
                     <option value="Open"
                         ${ticket.status === "Open"
@@ -292,7 +341,14 @@ function showTicketDetails(ticket) {
 
             notesHTML += `
             
-                <div class="bg-gray-800 p-3 rounded-xl mb-3 text-sm">
+                <div class="
+                    bg-gray-800 
+                    p-3 
+                    rounded-xl 
+                    mb-3 
+                    text-sm
+                    border border-gray-700
+                    ">
 
                     ${note.text}
 
@@ -303,20 +359,43 @@ function showTicketDetails(ticket) {
     } else {
 
         notesHTML =
-            `<p class="text-gray-400 text-sm">
+            `
+            <p class="text-gray-400 text-sm">
                 No notes available
-            </p>`;
+            </p>
+            `;
     }
 
     const modal =
         document.createElement("div");
 
     modal.className =
-        "fixed inset-0 bg-black/70 flex justify-center items-center z-50 p-4";
+        `
+        fixed 
+        inset-0 
+        bg-black/70 
+        flex 
+        justify-center 
+        items-center 
+        z-50 
+        p-4
+        `;
 
     modal.innerHTML = `
     
-        <div class="bg-[#111827] w-full max-w-xl rounded-2xl p-6 border border-gray-800 overflow-y-auto max-h-[90vh]">
+        <div class="
+            bg-[#111827] 
+            w-full 
+            max-w-xl 
+            rounded-2xl 
+            p-6 
+            border 
+            border-gray-800 
+            overflow-y-auto 
+            max-h-[90vh]
+            shadow-2xl
+            animate-in
+            ">
 
             <div class="flex justify-between items-center mb-5">
 
@@ -328,7 +407,12 @@ function showTicketDetails(ticket) {
 
                 <button
                     onclick="this.parentElement.parentElement.parentElement.remove()"
-                    class="text-xl text-gray-400 hover:text-white">
+                    class="
+                    text-xl 
+                    text-gray-400 
+                    hover:text-white
+                    transition
+                    ">
 
                     ✕
 
@@ -389,18 +473,6 @@ function showTicketDetails(ticket) {
                 <div>
 
                     <p class="text-gray-400 text-sm mb-2">
-                        Status
-                    </p>
-
-                    <p class="font-semibold">
-                        ${ticket.status}
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <p class="text-gray-400 text-sm mb-3">
                         Notes
                     </p>
 
@@ -443,7 +515,7 @@ async function updateTicketStatus(
         );
 
         showToast(
-            "Ticket Updated"
+            "Ticket Updated Successfully"
         );
 
         await fetchTickets(
@@ -453,10 +525,7 @@ async function updateTicketStatus(
 
     } catch (error) {
 
-        console.error(
-            "Error updating ticket:",
-            error
-        );
+        console.error(error);
     }
 }
 
@@ -516,7 +585,6 @@ function renderCharts(tickets) {
         ).length;
 
 
-    // DESTROY OLD
     if (statusChart)
         statusChart.destroy();
 
@@ -524,7 +592,7 @@ function renderCharts(tickets) {
         priorityChart.destroy();
 
 
-    // STATUS CHART
+    // DOUGHNUT
     statusChart = new Chart(
 
         document.getElementById(
@@ -569,7 +637,7 @@ function renderCharts(tickets) {
 
                 maintainAspectRatio: false,
 
-                cutout: "68%",
+                cutout: "70%",
 
                 plugins: {
 
@@ -590,7 +658,7 @@ function renderCharts(tickets) {
     );
 
 
-    // PRIORITY CHART
+    // BAR
     priorityChart = new Chart(
 
         document.getElementById(
@@ -623,9 +691,9 @@ function renderCharts(tickets) {
                         "#22c55e"
                     ],
 
-                    borderRadius: 10,
+                    borderRadius: 8,
 
-                    maxBarThickness: 40
+                    maxBarThickness: 35
                 }]
             },
 
@@ -649,7 +717,9 @@ function renderCharts(tickets) {
                         beginAtZero: true,
 
                         ticks: {
+
                             color: "white",
+
                             font: {
                                 size: 10
                             }
@@ -663,7 +733,9 @@ function renderCharts(tickets) {
                     x: {
 
                         ticks: {
+
                             color: "white",
+
                             font: {
                                 size: 10
                             }
@@ -745,17 +817,14 @@ ticketForm.addEventListener(
             ticketForm.reset();
 
             showToast(
-                "Ticket Created"
+                "Ticket Created Successfully"
             );
 
             await fetchTickets();
 
         } catch (error) {
 
-            console.error(
-                "Error creating ticket:",
-                error
-            );
+            console.error(error);
         }
     }
 );
