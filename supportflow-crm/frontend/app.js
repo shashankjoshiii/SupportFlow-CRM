@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/api/tickets";
+const API_URL = "https://YOUR-RENDER-URL.onrender.com/api/tickets";
 
 let statusChart;
 let priorityChart;
@@ -32,7 +32,7 @@ function showToast(message) {
         document.createElement("div");
 
     toast.className =
-        "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-8 py-5 rounded-2xl shadow-2xl z-50 text-lg font-semibold";
+        "fixed top-6 right-6 bg-green-500 text-white px-5 py-3 rounded-xl shadow-2xl z-50 text-sm font-semibold";
 
     toast.innerText = message;
 
@@ -42,7 +42,7 @@ function showToast(message) {
 
         toast.remove();
 
-    }, 2500);
+    }, 2200);
 }
 
 
@@ -175,7 +175,7 @@ function renderTickets(tickets) {
             <tr>
 
                 <td colspan="5"
-                    class="p-10 text-center text-gray-400">
+                    class="p-8 text-center text-gray-400 text-sm">
 
                     No tickets found
 
@@ -197,26 +197,26 @@ function renderTickets(tickets) {
             document.createElement("tr");
 
         row.className =
-            "border-t border-gray-800 hover:bg-gray-800 transition cursor-pointer";
+            "border-t border-gray-800 hover:bg-gray-800/70 transition cursor-pointer";
 
         row.innerHTML = `
         
-            <td class="p-6 font-semibold">
+            <td class="p-4 font-semibold text-sm">
                 ${ticket.ticket_id}
             </td>
 
-            <td class="p-6">
+            <td class="p-4 text-sm">
                 ${ticket.customer_name}
             </td>
 
-            <td class="p-6">
+            <td class="p-4 text-sm">
                 ${ticket.subject}
             </td>
 
-            <td class="p-6">
+            <td class="p-4">
 
                 <span
-                    class="px-3 py-1 rounded-full text-sm font-medium
+                    class="px-3 py-1 rounded-full text-xs font-medium
                     ${getPriorityClass(ticket.priority)}">
 
                     ${ticket.priority}
@@ -225,12 +225,12 @@ function renderTickets(tickets) {
 
             </td>
 
-            <td class="p-6">
+            <td class="p-4">
 
                 <select
                     onclick="event.stopPropagation()"
                     onchange="updateTicketStatus('${ticket.ticket_id}', this.value)"
-                    class="bg-[#1F2937] border border-gray-700 rounded-xl px-4 py-2 text-sm outline-none">
+                    class="bg-[#1F2937] border border-gray-700 rounded-lg px-3 py-2 text-xs outline-none">
 
                     <option value="Open"
                         ${ticket.status === "Open"
@@ -292,7 +292,7 @@ function showTicketDetails(ticket) {
 
             notesHTML += `
             
-                <div class="bg-gray-800 p-4 rounded-xl mb-3">
+                <div class="bg-gray-800 p-3 rounded-xl mb-3 text-sm">
 
                     ${note.text}
 
@@ -303,7 +303,7 @@ function showTicketDetails(ticket) {
     } else {
 
         notesHTML =
-            `<p class="text-gray-400">
+            `<p class="text-gray-400 text-sm">
                 No notes available
             </p>`;
     }
@@ -316,11 +316,11 @@ function showTicketDetails(ticket) {
 
     modal.innerHTML = `
     
-        <div class="bg-[#111827] w-full max-w-2xl rounded-3xl p-8 border border-gray-800 overflow-y-auto max-h-[90vh]">
+        <div class="bg-[#111827] w-full max-w-xl rounded-2xl p-6 border border-gray-800 overflow-y-auto max-h-[90vh]">
 
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-5">
 
-                <h2 class="text-3xl font-bold">
+                <h2 class="text-2xl font-bold">
 
                     ${ticket.ticket_id}
 
@@ -328,7 +328,7 @@ function showTicketDetails(ticket) {
 
                 <button
                     onclick="this.parentElement.parentElement.parentElement.remove()"
-                    class="text-2xl text-gray-400 hover:text-white">
+                    class="text-xl text-gray-400 hover:text-white">
 
                     ✕
 
@@ -336,15 +336,15 @@ function showTicketDetails(ticket) {
 
             </div>
 
-            <div class="space-y-5">
+            <div class="space-y-4">
 
                 <div>
 
-                    <p class="text-gray-400 mb-1">
+                    <p class="text-gray-400 text-sm mb-1">
                         Customer
                     </p>
 
-                    <p class="text-lg font-semibold">
+                    <p class="font-semibold">
                         ${ticket.customer_name}
                     </p>
 
@@ -352,11 +352,11 @@ function showTicketDetails(ticket) {
 
                 <div>
 
-                    <p class="text-gray-400 mb-1">
+                    <p class="text-gray-400 text-sm mb-1">
                         Email
                     </p>
 
-                    <p class="text-lg">
+                    <p>
                         ${ticket.customer_email}
                     </p>
 
@@ -364,11 +364,11 @@ function showTicketDetails(ticket) {
 
                 <div>
 
-                    <p class="text-gray-400 mb-1">
+                    <p class="text-gray-400 text-sm mb-1">
                         Subject
                     </p>
 
-                    <p class="text-lg">
+                    <p>
                         ${ticket.subject}
                     </p>
 
@@ -376,11 +376,11 @@ function showTicketDetails(ticket) {
 
                 <div>
 
-                    <p class="text-gray-400 mb-1">
+                    <p class="text-gray-400 text-sm mb-1">
                         Description
                     </p>
 
-                    <p class="text-lg">
+                    <p class="leading-7">
                         ${ticket.description}
                     </p>
 
@@ -388,11 +388,11 @@ function showTicketDetails(ticket) {
 
                 <div>
 
-                    <p class="text-gray-400 mb-2">
+                    <p class="text-gray-400 text-sm mb-2">
                         Status
                     </p>
 
-                    <p class="text-lg font-semibold">
+                    <p class="font-semibold">
                         ${ticket.status}
                     </p>
 
@@ -400,7 +400,7 @@ function showTicketDetails(ticket) {
 
                 <div>
 
-                    <p class="text-gray-400 mb-3">
+                    <p class="text-gray-400 text-sm mb-3">
                         Notes
                     </p>
 
@@ -443,10 +443,9 @@ async function updateTicketStatus(
         );
 
         showToast(
-            "Ticket Updated Successfully!"
+            "Ticket Updated"
         );
 
-        // LIVE REFRESH
         await fetchTickets(
             searchInput.value,
             statusFilter.value
@@ -540,7 +539,7 @@ function renderCharts(tickets) {
 
                 labels: [
                     "Open",
-                    "In Progress",
+                    "Progress",
                     "Closed"
                 ],
 
@@ -560,9 +559,7 @@ function renderCharts(tickets) {
 
                     borderColor: "#111827",
 
-                    borderWidth: 3,
-
-                    hoverOffset: 12
+                    borderWidth: 2
                 }]
             },
 
@@ -572,23 +569,18 @@ function renderCharts(tickets) {
 
                 maintainAspectRatio: false,
 
-                cutout: "65%",
+                cutout: "68%",
 
                 plugins: {
 
                     legend: {
 
-                        position: "top",
-
                         labels: {
 
                             color: "white",
 
-                            padding: 20,
-
                             font: {
-                                size: 13,
-                                weight: "600"
+                                size: 11
                             }
                         }
                     }
@@ -619,8 +611,6 @@ function renderCharts(tickets) {
 
                 datasets: [{
 
-                    label: "Tickets",
-
                     data: [
                         highPriority,
                         mediumPriority,
@@ -633,9 +623,9 @@ function renderCharts(tickets) {
                         "#22c55e"
                     ],
 
-                    borderRadius: 12,
+                    borderRadius: 10,
 
-                    maxBarThickness: 80
+                    maxBarThickness: 40
                 }]
             },
 
@@ -659,7 +649,10 @@ function renderCharts(tickets) {
                         beginAtZero: true,
 
                         ticks: {
-                            color: "white"
+                            color: "white",
+                            font: {
+                                size: 10
+                            }
                         },
 
                         grid: {
@@ -670,7 +663,10 @@ function renderCharts(tickets) {
                     x: {
 
                         ticks: {
-                            color: "white"
+                            color: "white",
+                            font: {
+                                size: 10
+                            }
                         },
 
                         grid: {
@@ -749,7 +745,7 @@ ticketForm.addEventListener(
             ticketForm.reset();
 
             showToast(
-                "Ticket Created Successfully!"
+                "Ticket Created"
             );
 
             await fetchTickets();
