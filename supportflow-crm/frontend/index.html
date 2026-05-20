@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>SupportFlow CRM</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 14px !important;
+            }
+
+            canvas {
+                max-height: 220px !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-[#030712] text-white min-h-screen overflow-x-hidden">
+
+    <!-- MODAL -->
+    <div id="ticketModal"
+        class="fixed inset-0 bg-black/70 hidden justify-center items-center z-50 p-4 overflow-y-auto">
+
+        <div
+            class="bg-[#111827] w-full max-w-lg sm:max-w-2xl rounded-3xl p-5 sm:p-8 border border-gray-800 shadow-2xl">
+
+            <!-- HEADER -->
+            <div class="flex justify-between items-center mb-6">
+
+                <h2 class="text-2xl sm:text-3xl font-bold">
+                    Create Ticket
+                </h2>
+
+                <button
+                    id="closeModalBtn"
+                    class="text-2xl text-gray-400 hover:text-white transition">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+            <!-- FORM -->
+            <form id="ticketForm" class="space-y-4">
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Customer Name"
+                    required
+                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition">
+
+                <input
+                    type="email"
+                    id="customerEmail"
+                    placeholder="Customer Email"
+                    required
+                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition">
+
+                <input
+                    type="text"
+                    id="subject"
+                    placeholder="Subject"
+                    required
+                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition">
+
+                <textarea
+                    id="description"
+                    rows="4"
+                    placeholder="Issue Description"
+                    required
+                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition"></textarea>
+
+                <select
+                    id="priority"
+                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition">
+
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+
+                </select>
+
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-semibold transition duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/30">
+
+                    Create Ticket
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- MOBILE TOPBAR -->
+    <div
+        class="lg:hidden flex justify-between items-center px-5 py-4 border-b border-gray-800 bg-[#0B1220] sticky top-0 z-40">
+
+        <h1 class="text-2xl font-bold text-blue-500">
+            SupportFlow
+        </h1>
+
+        <button
+            id="mobileMenuBtn"
+            class="bg-blue-600 p-2 rounded-xl hover:bg-blue-700 transition">
+
+            <i data-lucide="menu"></i>
+
+        </button>
+
+    </div>
+
+
+    <div class="flex">
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar"
+            class="fixed lg:static top-0 left-0 h-full w-72 bg-[#0B1220] border-r border-gray-800 p-6 flex flex-col transform -translate-x-full lg:translate-x-0 transition duration-300 z-50">
+
+            <!-- LOGO -->
+            <div class="mb-12">
+
+                <h1 class="text-4xl font-extrabold text-blue-500">
+                    SupportFlow
+                </h1>
+
+                <p class="text-gray-500 mt-2 text-sm">
+                    CRM Dashboard
+                </p>
+
+            </div>
+
+
+            <!-- NAV -->
+            <div class="space-y-2">
+
+                <button
+                    onclick="filterSidebar('All Status')"
+                    class="w-full flex items-center gap-3 bg-blue-600 hover:bg-blue-700 px-5 py-4 rounded-2xl font-medium transition duration-300 hover:scale-[1.02]">
+
+                    <i data-lucide="layout-dashboard"></i>
+
+                    Overview
+
+                </button>
+
+                <button
+                    onclick="filterSidebar('Open')"
+                    class="w-full flex items-center gap-3 hover:bg-gray-800 px-5 py-4 rounded-2xl transition duration-300 hover:translate-x-1 text-gray-300 hover:text-white">
+
+                    <i data-lucide="clock-3"></i>
+
+                    Open
+
+                </button>
+
+                <button
+                    onclick="filterSidebar('In Progress')"
+                    class="w-full flex items-center gap-3 hover:bg-gray-800 px-5 py-4 rounded-2xl transition duration-300 hover:translate-x-1 text-gray-300 hover:text-white">
+
+                    <i data-lucide="loader-circle"></i>
+
+                    In Progress
+
+                </button>
+
+                <button
+                    onclick="filterSidebar('Closed')"
+                    class="w-full flex items-center gap-3 hover:bg-gray-800 px-5 py-4 rounded-2xl transition duration-300 hover:translate-x-1 text-gray-300 hover:text-white">
+
+                    <i data-lucide="check-circle-2"></i>
+
+                    Closed
+
+                </button>
+
+            </div>
+
+
+            <!-- FOOTER -->
+            <div class="mt-auto">
+
+                <div
+                    class="bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl p-5 shadow-lg">
+
+                    <p class="font-semibold mb-2">
+                        Built by Shashank Joshi
+                    </p>
+
+                    <p class="text-sm text-blue-100">
+                        FastAPI • MongoDB • TailwindCSS • Vanilla JS
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+        <main class="flex-1 p-3 sm:p-4 md:p-8 lg:p-10 overflow-hidden">
+
+            <!-- HEADER -->
+            <div
+                class="flex flex-col md:flex-row justify-between md:items-center gap-6 mb-10">
+
+                <div>
+
+                    <h1
+                        class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3">
+
+                        Ticket Dashboard
+
+                    </h1>
+
+                    <p class="text-gray-400">
+
+                        Manage customer support efficiently
+
+                    </p>
+
+                </div>
+
+                <button
+                    id="openModalBtn"
+                    class="bg-blue-600 hover:bg-blue-700 px-5 sm:px-8 py-3 sm:py-4 rounded-2xl text-base sm:text-lg font-semibold shadow-lg transition duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30">
+
+                    + Create Ticket
+
+                </button>
+
+            </div>
+
+
+            <!-- STATS -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+
+                <div
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+
+                    <p class="text-gray-400 mb-3">
+                        Total Tickets
+                    </p>
+
+                    <h3
+                        id="totalTickets"
+                        class="text-3xl sm:text-4xl md:text-5xl font-bold">
+
+                        0
+
+                    </h3>
+
+                </div>
+
+                <div
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+
+                    <p class="text-gray-400 mb-3">
+                        Open
+                    </p>
+
+                    <h3
+                        id="openTickets"
+                        class="text-3xl sm:text-4xl md:text-5xl font-bold text-yellow-400">
+
+                        0
+
+                    </h3>
+
+                </div>
+
+                <div
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+
+                    <p class="text-gray-400 mb-3">
+                        In Progress
+                    </p>
+
+                    <h3
+                        id="progressTickets"
+                        class="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-400">
+
+                        0
+
+                    </h3>
+
+                </div>
+
+                <div
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/10 transition duration-300">
+
+                    <p class="text-gray-400 mb-3">
+                        Closed
+                    </p>
+
+                    <h3
+                        id="closedTickets"
+                        class="text-3xl sm:text-4xl md:text-5xl font-bold text-green-400">
+
+                        0
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHARTS -->
+            <div
+                class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-10">
+
+                <div
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-4 sm:p-6 h-[300px] sm:h-[350px] hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-6">
+                        Ticket Status
+                    </h3>
+
+                    <div class="h-[200px] sm:h-[240px]">
+
+                        <canvas id="statusChart"></canvas>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-4 sm:p-6 h-[300px] sm:h-[350px] hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-6">
+                        Priority Analytics
+                    </h3>
+
+                    <div class="h-[200px] sm:h-[240px]">
+
+                        <canvas id="priorityChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <div
+                class="flex flex-col md:flex-row gap-4 mb-8">
+
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Search tickets..."
+                    class="flex-1 bg-[#111827] border border-gray-800 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition">
+
+                <select
+                    id="statusFilter"
+                    class="bg-[#111827] border border-gray-800 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition">
+
+                    <option>All Status</option>
+                    <option>Open</option>
+                    <option>In Progress</option>
+                    <option>Closed</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TABLE -->
+            <div
+                class="bg-[#111827] border border-gray-800 rounded-3xl overflow-x-auto hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+
+                <table class="w-full min-w-[700px]">
+
+                    <thead class="bg-[#1F2937]">
+
+                        <tr>
+
+                            <th class="text-left p-6">
+                                Ticket ID
+                            </th>
+
+                            <th class="text-left p-6">
+                                Customer
+                            </th>
+
+                            <th class="text-left p-6">
+                                Subject
+                            </th>
+
+                            <th class="text-left p-6">
+                                Priority
+                            </th>
+
+                            <th class="text-left p-6">
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="ticketTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- ICONS -->
+    <script>
+
+        lucide.createIcons();
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        const mobileMenuBtn =
+            document.getElementById("mobileMenuBtn");
+
+        mobileMenuBtn.addEventListener(
+            "click",
+            () => {
+
+                sidebar.classList.toggle(
+                    "-translate-x-full"
+                );
+            }
+        );
+
+    </script>
+
+    <!-- JS -->
+    <script src="app.js"></script>
+
+</body>
+
+</html>
