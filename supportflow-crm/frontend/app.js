@@ -1,4 +1,4 @@
-const API_URL = "https://YOUR-RENDER-URL.onrender.com/api/tickets";
+const API_URL = "https://supportflow-crm.onrender.com/api/tickets";
 
 let statusChart;
 let priorityChart;
