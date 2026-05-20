@@ -55,8 +55,29 @@
             }
 
             canvas {
-                max-height: 220px !important;
+                max-height: 180px !important;
             }
+
+            h1 {
+                line-height: 1.1;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .mobile-chart {
+                height: 280px !important;
+            }
+
+            .mobile-main {
+                padding: 14px !important;
+            }
+
+            .mobile-sidebar {
+                width: 260px !important;
+            }
+
         }
 
     </style>
@@ -168,10 +189,10 @@
 
         <!-- SIDEBAR -->
         <aside id="sidebar"
-            class="fixed lg:static top-0 left-0 h-full w-72 bg-[#0B1220] border-r border-gray-800 p-6 flex flex-col transform -translate-x-full lg:translate-x-0 transition duration-300 z-50">
+            class="mobile-sidebar fixed lg:static top-0 left-0 h-full w-64 bg-[#0B1220] border-r border-gray-800 p-6 flex flex-col transform -translate-x-full lg:translate-x-0 transition duration-300 z-50">
 
             <!-- LOGO -->
-            <div class="mb-12">
+            <div class="mb-10">
 
                 <h1 class="text-4xl font-extrabold text-blue-500">
                     SupportFlow
@@ -240,7 +261,7 @@
                         Built by Shashank Joshi
                     </p>
 
-                    <p class="text-sm text-blue-100">
+                    <p class="text-sm text-blue-100 leading-6">
                         FastAPI • MongoDB • TailwindCSS • Vanilla JS
                     </p>
 
@@ -252,11 +273,11 @@
 
 
         <!-- MAIN -->
-        <main class="flex-1 p-3 sm:p-4 md:p-8 lg:p-10 overflow-hidden">
+        <main class="mobile-main flex-1 p-3 sm:p-5 md:p-6 lg:p-7 overflow-hidden">
 
             <!-- HEADER -->
             <div
-                class="flex flex-col md:flex-row justify-between md:items-center gap-6 mb-10">
+                class="flex flex-col md:flex-row justify-between md:items-center gap-5 mb-8">
 
                 <div>
 
@@ -288,10 +309,10 @@
 
             <!-- STATS -->
             <div
-                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+                class="stats-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
 
                 <div
-                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-6 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
 
                     <p class="text-gray-400 mb-3">
                         Total Tickets
@@ -299,7 +320,7 @@
 
                     <h3
                         id="totalTickets"
-                        class="text-3xl sm:text-4xl md:text-5xl font-bold">
+                        class="text-3xl sm:text-4xl font-bold">
 
                         0
 
@@ -308,7 +329,7 @@
                 </div>
 
                 <div
-                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-6 hover:-translate-y-2 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
 
                     <p class="text-gray-400 mb-3">
                         Open
@@ -316,7 +337,7 @@
 
                     <h3
                         id="openTickets"
-                        class="text-3xl sm:text-4xl md:text-5xl font-bold text-yellow-400">
+                        class="text-3xl sm:text-4xl font-bold text-yellow-400">
 
                         0
 
@@ -325,7 +346,7 @@
                 </div>
 
                 <div
-                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-6 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
 
                     <p class="text-gray-400 mb-3">
                         In Progress
@@ -333,7 +354,7 @@
 
                     <h3
                         id="progressTickets"
-                        class="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-400">
+                        class="text-3xl sm:text-4xl font-bold text-blue-400">
 
                         0
 
@@ -342,7 +363,7 @@
                 </div>
 
                 <div
-                    class="bg-[#111827] border border-gray-800 rounded-3xl p-7 hover:-translate-y-2 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/10 transition duration-300">
+                    class="bg-[#111827] border border-gray-800 rounded-3xl p-6 hover:-translate-y-2 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/10 transition duration-300">
 
                     <p class="text-gray-400 mb-3">
                         Closed
@@ -350,7 +371,7 @@
 
                     <h3
                         id="closedTickets"
-                        class="text-3xl sm:text-4xl md:text-5xl font-bold text-green-400">
+                        class="text-3xl sm:text-4xl font-bold text-green-400">
 
                         0
 
@@ -363,16 +384,16 @@
 
             <!-- CHARTS -->
             <div
-                class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-10">
+                class="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-8">
 
                 <div
-                    class="bg-[#111827] border border-gray-800 rounded-3xl p-4 sm:p-6 h-[300px] sm:h-[350px] hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+                    class="mobile-chart bg-[#111827] border border-gray-800 rounded-3xl p-5 sm:p-6 h-[280px] sm:h-[320px] hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
 
-                    <h3 class="text-xl sm:text-2xl font-semibold mb-6">
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-5">
                         Ticket Status
                     </h3>
 
-                    <div class="h-[200px] sm:h-[240px]">
+                    <div class="h-[200px] sm:h-[220px]">
 
                         <canvas id="statusChart"></canvas>
 
@@ -381,13 +402,13 @@
                 </div>
 
                 <div
-                    class="bg-[#111827] border border-gray-800 rounded-3xl p-4 sm:p-6 h-[300px] sm:h-[350px] hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
+                    class="mobile-chart bg-[#111827] border border-gray-800 rounded-3xl p-5 sm:p-6 h-[280px] sm:h-[320px] hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300">
 
-                    <h3 class="text-xl sm:text-2xl font-semibold mb-6">
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-5">
                         Priority Analytics
                     </h3>
 
-                    <div class="h-[200px] sm:h-[240px]">
+                    <div class="h-[200px] sm:h-[220px]">
 
                         <canvas id="priorityChart"></canvas>
 
