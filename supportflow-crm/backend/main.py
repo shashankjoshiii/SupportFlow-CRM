@@ -7,7 +7,8 @@ import string
 
 app = FastAPI()
 
-# CORS
+
+# CORS FIX
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,7 +18,7 @@ app.add_middleware(
 )
 
 
-# HOME
+# HOME ROUTE
 @app.get("/")
 def home():
 
@@ -30,6 +31,7 @@ def home():
 def generate_ticket_id():
 
     random_part = ''.join(
+
         random.choices(
             string.ascii_uppercase + string.digits,
             k=6
@@ -56,6 +58,7 @@ def create_ticket(ticket: dict):
     tickets_collection.insert_one(ticket)
 
     return {
+        "success": True,
         "message": "Ticket created successfully"
     }
 
@@ -69,6 +72,7 @@ def get_tickets(
 
     query = {}
 
+    # SEARCH
     if search:
 
         query["$or"] = [
@@ -109,11 +113,16 @@ def get_tickets(
             }
         ]
 
-    if status:
+    # STATUS FILTER
+    if (
+        status and
+        status != "All Status"
+    ):
 
         query["status"] = status
 
     tickets = list(
+
         tickets_collection.find(
             query,
             {"_id": 0}
@@ -128,9 +137,17 @@ def get_tickets(
 def get_single_ticket(ticket_id: str):
 
     ticket = tickets_collection.find_one(
+
         {"ticket_id": ticket_id},
         {"_id": 0}
     )
+
+    if not ticket:
+
+        return {
+            "success": False,
+            "message": "Ticket not found"
+        }
 
     return ticket
 
@@ -143,21 +160,32 @@ def update_ticket(
 ):
 
     update_data = {
-        "status": data["status"],
+
+        "status": data.get("status"),
+
         "updated_at": datetime.utcnow()
     }
 
-    if "note" in data and data["note"]:
+    # ADD NOTE
+    if (
+        "note" in data and
+        data["note"]
+    ):
 
         tickets_collection.update_one(
 
             {"ticket_id": ticket_id},
 
             {
+
                 "$push": {
+
                     "notes": {
+
                         "text": data["note"],
-                        "created_at": datetime.utcnow()
+
+                        "created_at":
+                            datetime.utcnow()
                     }
                 },
 
@@ -176,6 +204,36 @@ def update_ticket(
             }
         )
 
+    updated_ticket = tickets_collection.find_one(
+
+        {"ticket_id": ticket_id},
+        {"_id": 0}
+    )
+
     return {
-        "success": True
+
+        "success": True,
+
+        "message":
+            "Ticket updated successfully",
+
+        "ticket":
+            updated_ticket
+    }
+
+
+# DELETE TICKET
+@app.delete("/api/tickets/{ticket_id}")
+def delete_ticket(ticket_id: str):
+
+    tickets_collection.delete_one(
+        {"ticket_id": ticket_id}
+    )
+
+    return {
+
+        "success": True,
+
+        "message":
+            "Ticket deleted successfully"
     }
